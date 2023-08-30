@@ -4,6 +4,7 @@
   "description": "Extract text from HTML. Excludes content from metadata tags by default.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": "git://github.com/smartprocure/extract-text-html.git",
   "scripts": {
     "prepare": "npm run lint && npm test && npm run build",
     "clean": "rm -rf dist",
