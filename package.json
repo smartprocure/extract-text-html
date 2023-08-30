@@ -1,0 +1,41 @@
+{
+  "name": "extract-text-html",
+  "version": "0.1.0",
+  "description": "Extract text from HTML. Excludes content from metadata tags by default.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepare": "npm run lint && npm test && npm run build",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc --declaration",
+    "build:watch": "tsc --watch",
+    "test": "jest",
+    "lint": "eslint src/**"
+  },
+  "keywords": [
+    "extract",
+    "text",
+    "html",
+    "strip",
+    "tags",
+    "metadata"
+  ],
+  "author": "GovSpend",
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.4",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "eslint": "^8.48.0",
+    "prettier": "^2.8.8",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "htmlparser2": "^9.0.0"
+  }
+}
