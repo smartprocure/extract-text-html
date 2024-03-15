@@ -52,7 +52,7 @@ describe('extractText', () => {
 <br>
 <p>more text</p>`
     const extracted = extractText(html, {
-      trimWhitespace: false,
+      preserveWhitespace: true,
       replacements: [
         { matchTag: 'br', text: '  ', isSelfClosing: true },
         { matchTag: 'b', text: '__' },

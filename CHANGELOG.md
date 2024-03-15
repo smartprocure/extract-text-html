@@ -1,6 +1,7 @@
 # 0.2.0
 
 - Add `replacements` options to optionally replace tags with text.
+- Changed `removeWhitespace` option to `preserveWhitespace`.
 
 # 0.1.0
 

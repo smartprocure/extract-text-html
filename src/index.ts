@@ -15,8 +15,8 @@ export interface Replacement {
 export interface Options {
   /** Exclude the content from the set of tags. For example, style and script. */
   excludeContentFromTags?: string[]
-  /** Reduces multiple spaces to a single space and trims whitespace from the start and end. */
-  trimWhitespace?: boolean
+  /** Do not trim whitespace. */ 
+  preserveWhitespace?: boolean
   /** Replace a tag with some text. Flag self-closing tags with isSelfClosing: true. */
   replacements?: Replacement[]
 }
@@ -36,14 +36,14 @@ export const defaultExcludeContentFromTags = [
 
 /**
  * Extract text from HTML. Excludes content from metadata tags by default.
- * For example, script and style. Removes excess whitespace by default.
- * Optionally, replace tags with text.
+ * For example, script and style. Reduces multiple spaces to a single space
+ * and trims whitespace from the start and end by default. Set preserveWhitespace
+ * to true to disable this behavior. Optionally, replace tags with text.
  */
 export const extractText = (html: string, options: Options = {}) => {
   // Options
   const excludeTags =
     options.excludeContentFromTags ?? defaultExcludeContentFromTags
-  const trimWhitespace = options.trimWhitespace ?? true
   const replacements = options.replacements ?? []
 
   let excludeTextForTag = ''
@@ -88,8 +88,8 @@ export const extractText = (html: string, options: Options = {}) => {
   parser.write(html)
   parser.end()
 
-  // Remove excess whitespace if needed
-  return trimWhitespace
-    ? strippedText.replace(/\s+/g, ' ').trim()
-    : strippedText
+  return options.preserveWhitespace
+    ? strippedText
+    : // Remove excess whitespace
+      strippedText.replace(/\s+/g, ' ').trim()
 }
