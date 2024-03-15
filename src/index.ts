@@ -17,7 +17,7 @@ export interface Options {
   excludeContentFromTags?: string[]
   /** Reduces multiple spaces to a single space and trims whitespace from the start and end. */
   trimWhitespace?: boolean
-  /** Replace a tag with some text. Flag self-closing tags with selfClosing: true. */
+  /** Replace a tag with some text. Flag self-closing tags with isSelfClosing: true. */
   replacements?: Replacement[]
 }
 
