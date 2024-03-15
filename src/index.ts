@@ -44,8 +44,8 @@ const stack = () => {
     tagStack.pop()
     return tagStack.length
   }
-  const length = () => tagStack.length
-  return { add, remove, length }
+  const isEmpty = () => tagStack.length === 0
+  return { add, remove, isEmpty }
 }
 
 /**
@@ -81,7 +81,7 @@ export const extractText = (html: string, options: Options = {}) => {
       }
     },
     ontext(text) {
-      if (!excludeStack.length()) {
+      if (excludeStack.isEmpty()) {
         strippedText += text
       }
     },
