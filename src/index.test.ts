@@ -34,6 +34,7 @@ describe('extractText', () => {
       Should not include
     </head>
     <TITLE data-react-helmet="true">extracttext - npm search</TITLE>
+    <!-- Some comment -->
     <h1>Some Title</h1>
     <div style="font-weight: bold">Some   text</div>
     <script crossorigin="anonymous" src="https://static-production.npmjs.com/minicssextractbug.536095f4b1a94d2b149c.js"></script>
