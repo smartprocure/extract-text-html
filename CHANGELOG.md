@@ -2,6 +2,7 @@
 
 - Add `replacements` options to optionally replace tags with text.
 - Changed `removeWhitespace` option to `preserveWhitespace`.
+- Properly handle nested tag exclusion.
 
 # 0.1.0
 

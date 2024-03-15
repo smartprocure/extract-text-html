@@ -46,6 +46,16 @@ describe('extractText', () => {
     const extracted = extractText(html)
     expect(extracted).toBe('Some Title Some text')
   })
+  it('should handle custom excludeContentFromTags', () => {
+    const html = `
+    <div>
+      <div>Exclude</div>me
+    </div>
+    <p>Include me</p>
+    `
+    const extracted = extractText(html, { excludeContentFromTags: ['div'] })
+    expect(extracted).toBe('Include me')
+  })
   it('should replace tags with text and not trim whitespace', () => {
     const html = `<b>bold <span>text</span></b>
 <div>some text</div>

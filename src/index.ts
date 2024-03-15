@@ -15,7 +15,7 @@ export interface Replacement {
 export interface Options {
   /** Exclude the content from the set of tags. For example, style and script. */
   excludeContentFromTags?: string[]
-  /** Whitespace is trimmed by default. Set this to true to preserve whitespace. */ 
+  /** Whitespace is trimmed by default. Set this to true to preserve whitespace. */
   preserveWhitespace?: boolean
   /** Replace a tag with some text. Flag self-closing tags with isSelfClosing: true. */
   replacements?: Replacement[]
@@ -34,6 +34,20 @@ export const defaultExcludeContentFromTags = [
   'title',
 ]
 
+const stack = () => {
+  const tagStack: string[] = []
+  const add = (tagName: string) => {
+    tagStack.push(tagName)
+    return tagStack.length
+  }
+  const remove = () => {
+    tagStack.pop()
+    return tagStack.length
+  }
+  const length = () => tagStack.length
+  return { add, remove, length }
+}
+
 /**
  * Extract text from HTML. Excludes content from metadata tags by default.
  * For example, script and style. Reduces multiple spaces to a single space
@@ -46,7 +60,7 @@ export const extractText = (html: string, options: Options = {}) => {
     options.excludeContentFromTags ?? defaultExcludeContentFromTags
   const replacements = options.replacements ?? []
 
-  let excludeTextForTag = ''
+  const excludeStack = stack()
   let strippedText = ''
 
   const shouldExclude = (name: string) => excludeTags.includes(name)
@@ -57,9 +71,8 @@ export const extractText = (html: string, options: Options = {}) => {
   const parser = new htmlparser2.Parser({
     onopentagname(name) {
       debug('open tag name %s', name)
-      if (shouldExclude(name) && excludeTextForTag === '') {
+      if (shouldExclude(name) && excludeStack.add(name) === 1) {
         debug('start excluding')
-        excludeTextForTag = name
       }
       const replacement = findReplacement(name)
       if (options.replacements && replacement) {
@@ -68,15 +81,14 @@ export const extractText = (html: string, options: Options = {}) => {
       }
     },
     ontext(text) {
-      if (!excludeTextForTag) {
+      if (!excludeStack.length()) {
         strippedText += text
       }
     },
     onclosetag(name) {
       debug('close tag name %s', name)
-      if (shouldExclude(name) && excludeTextForTag === name) {
+      if (shouldExclude(name) && excludeStack.remove() === 0) {
         debug('stop excluding')
-        excludeTextForTag = ''
       }
       const replacement = findReplacement(name)
       if (options.replacements && replacement && !replacement.isSelfClosing) {
