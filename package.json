@@ -18,9 +18,11 @@
     "text",
     "html",
     "strip",
+    "tag",
     "tags",
     "metadata",
-    "replace"
+    "replace",
+    "replacement"
   ],
   "author": "GovSpend",
   "prettier": {
