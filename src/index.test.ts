@@ -9,6 +9,11 @@ describe('extractText', () => {
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://static-production.npmjs.com/styles.74f9073cf68d3c5f4990.css" />
     <title data-react-helmet="true">extracttext - npm search</title>
+    <style>
+      p {
+        color: #26b72b;
+      }
+    </style>
   </head>
   <body>
     <h1>Some Title</h1>
@@ -33,6 +38,16 @@ describe('extractText', () => {
       <link rel="stylesheet" href="https://static-production.npmjs.com/styles.74f9073cf68d3c5f4990.css" />
       Should not include
     </head>
+    <noscript>
+      <!-- anchor linking to external file -->
+      <a href="https://www.mozilla.org/">External Link</a>
+    </noscript>
+    <style>
+      p {
+        color: #26b72b;
+      }
+    </style>
+    <meta http-equiv="refresh" content="3;url=https://www.mozilla.org" />
     <TITLE data-react-helmet="true">extracttext - npm search</TITLE>
     <!-- Some comment -->
     <h1>Some Title</h1>
