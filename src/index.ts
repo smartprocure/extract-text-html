@@ -74,10 +74,12 @@ export const extractText = (html: string, options: Options = {}) => {
       if (shouldExclude(name) && excludeStack.add(name) === 1) {
         debug('start excluding')
       }
-      const replacement = findReplacement(name)
-      if (options.replacements && replacement) {
-        debug('replace open tag %s with %s', name, replacement.text)
-        strippedText += replacement.text
+      if (options.replacements) {
+        const replacement = findReplacement(name)
+        if (replacement) {
+          debug('replace open tag %s with %s', name, replacement.text)
+          strippedText += replacement.text
+        }
       }
     },
     ontext(text) {
@@ -90,10 +92,12 @@ export const extractText = (html: string, options: Options = {}) => {
       if (shouldExclude(name) && excludeStack.remove() === 0) {
         debug('stop excluding')
       }
-      const replacement = findReplacement(name)
-      if (options.replacements && replacement && !replacement.isSelfClosing) {
-        debug('replace close tag %s with %s', name, replacement.text)
-        strippedText += replacement.text
+      if (options.replacements) {
+        const replacement = findReplacement(name)
+        if (replacement && !replacement.isSelfClosing) {
+          debug('replace close tag %s with %s', name, replacement.text)
+          strippedText += replacement.text
+        }
       }
     },
   })
