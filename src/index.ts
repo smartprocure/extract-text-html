@@ -15,7 +15,7 @@ export interface Replacement {
 export interface Options {
   /** Exclude the content from the set of tags. For example, style and script. */
   excludeContentFromTags?: string[]
-  /** Do not trim whitespace. */ 
+  /** Whitespace is trimmed by default. Set this to true to preserve whitespace. */ 
   preserveWhitespace?: boolean
   /** Replace a tag with some text. Flag self-closing tags with isSelfClosing: true. */
   replacements?: Replacement[]
