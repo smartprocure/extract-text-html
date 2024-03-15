@@ -1,8 +1,9 @@
 # extract-text-html
 
 Extract text from HTML. Excludes content from metadata tags by default.
-For example, `script` and `style`. Removes excess whitespace by default.
-Optionally, replace tags with text.
+For example, script and style. Reduces multiple spaces to a single space
+and trims whitespace from the start and end by default. Set `preserveWhitespace`
+to `true` to disable this behavior. Optionally, replace tags with text.
 
 Single dependency on [htmlparser2](https://www.npmjs.com/package/htmlparser2)
 

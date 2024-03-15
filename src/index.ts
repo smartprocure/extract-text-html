@@ -51,8 +51,8 @@ const stack = () => {
 /**
  * Extract text from HTML. Excludes content from metadata tags by default.
  * For example, script and style. Reduces multiple spaces to a single space
- * and trims whitespace from the start and end by default. Set preserveWhitespace
- * to true to disable this behavior. Optionally, replace tags with text.
+ * and trims whitespace from the start and end by default. Set `preserveWhitespace`
+ * to `true` to disable this behavior. Optionally, replace tags with text.
  */
 export const extractText = (html: string, options: Options = {}) => {
   // Options
