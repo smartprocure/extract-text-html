@@ -37,6 +37,7 @@ export const defaultExcludeContentFromTags = [
 /**
  * Extract text from HTML. Excludes content from metadata tags by default.
  * For example, script and style. Removes excess whitespace by default.
+ * Optionally, replace tags with text.
  */
 export const extractText = (html: string, options: Options = {}) => {
   // Options
