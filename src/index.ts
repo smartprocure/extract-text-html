@@ -1,4 +1,3 @@
-import { isMatch } from 'lodash'
 import * as htmlparser2 from 'htmlparser2'
 import _debug from 'debug'
 
@@ -7,8 +6,6 @@ const debug = _debug('extract-text-html')
 export interface Replacement {
   /** Tag name to match (without brackets) */
   matchTag: string
-  /** Attributes to match */
-  matchAttrs?: Record<string, string>
   /** Text to replace the tag with */
   text: string
   /** Is the tag self-closing?  */
@@ -50,29 +47,21 @@ export const extractText = (html: string, options: Options = {}) => {
 
   let excludeText = false
   let strippedText = ''
-  let replacement: Replacement | undefined
 
   const shouldExclude = (name: string) => excludeTags.includes(name)
 
-  const findReplacement = (name: string, attrs: Record<string, string> = {}) =>
-    replacements.find(({ matchTag, matchAttrs }) => {
-      if (matchTag === name) {
-        if (matchAttrs) {
-          return isMatch(attrs, matchAttrs)
-        }
-        return true
-      }
-    })
+  const findReplacement = (name: string) =>
+    replacements.find(({ matchTag }) => matchTag === name)
 
   const parser = new htmlparser2.Parser({
-    onopentag(name, attrs) {
+    onopentagname(name) {
       debug('open tag name %s', name)
       if (shouldExclude(name)) {
         excludeText = true
       }
-      replacement = findReplacement(name, attrs)
+      const replacement = findReplacement(name)
       if (options.replacements && replacement) {
-        debug('replace open tag %s with attrs %o', name, attrs)
+        debug('replace open tag %s with %s', name, replacement.text)
         strippedText += replacement.text
       }
     },
@@ -86,6 +75,7 @@ export const extractText = (html: string, options: Options = {}) => {
       if (shouldExclude(name)) {
         excludeText = false
       }
+      const replacement = findReplacement(name)
       if (options.replacements && replacement && !replacement.selfClosing) {
         debug('replace close tag %s with %s', name, replacement.text)
         strippedText += replacement.text

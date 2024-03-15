@@ -1,7 +1,7 @@
 import { extractText } from '.'
 
 describe('extractText', () => {
-  it.only('should extract text from well-formed HTML', () => {
+  it('should extract text from well-formed HTML', () => {
     const html = `
 <!doctype html>
 <html lang="en">
@@ -43,8 +43,8 @@ describe('extractText', () => {
     expect(extracted).toBe('Some Title Some text')
   })
   it('should replace tags with text and not trim whitespace', () => {
-    const html = `<div style="font-weight: bold">bold text</div>
-<div>not bold</div>
+    const html = `<b>bold <span>text</span></b>
+<div>some text</div>
 <br />
 <br>
 <p>more text</p>`
@@ -52,15 +52,11 @@ describe('extractText', () => {
       trimWhitespace: false,
       replacements: [
         { matchTag: 'br', text: '  ', selfClosing: true },
-        {
-          matchTag: 'div',
-          matchAttrs: { style: 'font-weight: bold' },
-          text: '__',
-        },
+        { matchTag: 'b', text: '__' },
       ],
     })
     expect(extracted).toBe(`__bold text__
-not bold
+some text
   
   
 more text`)
