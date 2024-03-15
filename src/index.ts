@@ -34,17 +34,17 @@ export const defaultExcludeContentFromTags = [
   'title',
 ]
 
-const stack = () => {
-  const tagStack: string[] = []
-  const add = (tagName: string) => {
-    tagStack.push(tagName)
-    return tagStack.length
+const newStack = <T>() => {
+  const stack: T[] = []
+  const add = (item: T) => {
+    stack.push(item)
+    return stack.length
   }
   const remove = () => {
-    tagStack.pop()
-    return tagStack.length
+    stack.pop()
+    return stack.length
   }
-  const isEmpty = () => tagStack.length === 0
+  const isEmpty = () => stack.length === 0
   return { add, remove, isEmpty }
 }
 
@@ -60,7 +60,7 @@ export const extractText = (html: string, options: Options = {}) => {
     options.excludeContentFromTags ?? defaultExcludeContentFromTags
   const replacements = options.replacements ?? []
 
-  const excludeStack = stack()
+  const excludeStack = newStack<string>()
   let strippedText = ''
 
   const shouldExclude = (name: string) => excludeTags.includes(name)
