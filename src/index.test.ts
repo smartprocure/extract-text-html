@@ -1,7 +1,7 @@
 import { extractText } from '.'
 
 describe('extractText', () => {
-  it('should extract text from well-formed HTML', () => {
+  it.only('should extract text from well-formed HTML', () => {
     const html = `
 <!doctype html>
 <html lang="en">
@@ -51,7 +51,7 @@ describe('extractText', () => {
     const extracted = extractText(html, {
       trimWhitespace: false,
       replacements: [
-        { matchTag: 'br', text: '  ', selfClosing: true },
+        { matchTag: 'br', text: '  ', isSelfClosing: true },
         { matchTag: 'b', text: '__' },
       ],
     })

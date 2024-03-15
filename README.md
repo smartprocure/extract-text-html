@@ -13,7 +13,7 @@ export interface Replacement {
   /** Text to replace the tag with */
   text: string
   /** Is the tag self-closing?  */
-  selfClosing?: boolean
+  isSelfClosing?: boolean
 }
 
 export interface Options {

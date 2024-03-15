@@ -9,7 +9,7 @@ export interface Replacement {
   /** Text to replace the tag with */
   text: string
   /** Is the tag self-closing?  */
-  selfClosing?: boolean
+  isSelfClosing?: boolean
 }
 
 export interface Options {
@@ -58,6 +58,7 @@ export const extractText = (html: string, options: Options = {}) => {
     onopentagname(name) {
       debug('open tag name %s', name)
       if (shouldExclude(name)) {
+        debug('start excluding')
         excludeText = true
       }
       const replacement = findReplacement(name)
@@ -74,10 +75,11 @@ export const extractText = (html: string, options: Options = {}) => {
     onclosetag(name) {
       debug('close tag name %s', name)
       if (shouldExclude(name)) {
+        debug('stop excluding')
         excludeText = false
       }
       const replacement = findReplacement(name)
-      if (options.replacements && replacement && !replacement.selfClosing) {
+      if (options.replacements && replacement && !replacement.isSelfClosing) {
         debug('replace close tag %s with %s', name, replacement.text)
         strippedText += replacement.text
       }
