@@ -19,7 +19,8 @@
     "html",
     "strip",
     "tags",
-    "metadata"
+    "metadata",
+    "replace"
   ],
   "author": "GovSpend",
   "prettier": {
