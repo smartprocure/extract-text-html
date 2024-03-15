@@ -19,9 +19,9 @@ export interface Replacement {
 export interface Options {
   /** Exclude the content from the set of tags. For example, style and script. */
   excludeContentFromTags?: string[]
-  /** Reduces multiple spaces to a single space and trims whitespace from the start and end. */
-  trimWhitespace?: boolean
-  /** Replace a tag with some text. Flag self-closing tags with selfClosing: true. */
+  /** Whitespace is trimmed by default. Set this to true to preserve whitespace. */
+  preserveWhitespace?: boolean
+  /** Replace a tag with some text. Flag self-closing tags with isSelfClosing: true. */
   replacements?: Replacement[]
 }
 ```
