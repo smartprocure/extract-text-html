@@ -46,7 +46,7 @@ export const extractText = (html: string, options: Options = {}) => {
   const trimWhitespace = options.trimWhitespace ?? true
   const replacements = options.replacements ?? []
 
-  let excludeText = false
+  let excludeTextForTag = ''
   let strippedText = ''
 
   const shouldExclude = (name: string) => excludeTags.includes(name)
@@ -57,9 +57,9 @@ export const extractText = (html: string, options: Options = {}) => {
   const parser = new htmlparser2.Parser({
     onopentagname(name) {
       debug('open tag name %s', name)
-      if (shouldExclude(name)) {
+      if (shouldExclude(name) && excludeTextForTag === '') {
         debug('start excluding')
-        excludeText = true
+        excludeTextForTag = name
       }
       const replacement = findReplacement(name)
       if (options.replacements && replacement) {
@@ -68,15 +68,15 @@ export const extractText = (html: string, options: Options = {}) => {
       }
     },
     ontext(text) {
-      if (!excludeText) {
+      if (!excludeTextForTag) {
         strippedText += text
       }
     },
     onclosetag(name) {
       debug('close tag name %s', name)
-      if (shouldExclude(name)) {
+      if (shouldExclude(name) && excludeTextForTag === name) {
         debug('stop excluding')
-        excludeText = false
+        excludeTextForTag = ''
       }
       const replacement = findReplacement(name)
       if (options.replacements && replacement && !replacement.isSelfClosing) {
