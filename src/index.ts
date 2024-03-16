@@ -49,7 +49,7 @@ export const extractText = (html: string, options: Options = {}) => {
   const excludeStack: string[] = []
   let extractedText = ''
 
-  const shouldExclude = (name: string) => excludeTags.includes(name)
+  const shouldExcludeTag = (name: string) => excludeTags.includes(name)
 
   const findReplacement = (name: string) =>
     replacements.find(({ matchTag }) => matchTag === name)
@@ -57,7 +57,7 @@ export const extractText = (html: string, options: Options = {}) => {
   const parser = new htmlparser2.Parser({
     onopentagname(name) {
       debug('open tag name %s', name)
-      if (shouldExclude(name) && excludeStack.push(name) === 1) {
+      if (shouldExcludeTag(name) && excludeStack.push(name) === 1) {
         debug('start excluding')
       }
       if (options.replacements) {
@@ -75,7 +75,7 @@ export const extractText = (html: string, options: Options = {}) => {
     },
     onclosetag(name) {
       debug('close tag name %s', name)
-      if (shouldExclude(name)) {
+      if (shouldExcludeTag(name)) {
         excludeStack.pop()
         if (excludeStack.length === 0) {
           debug('stop excluding')
