@@ -73,21 +73,19 @@ describe('extractText', () => {
   })
   it('should replace tags with text and not trim whitespace', () => {
     const html = `<b>bold <span>text</span></b>
-<div>some text</div>
-<br />
-<br>
+<div>some text</div><br /><br>
 <p>more text</p>`
     const extracted = extractText(html, {
       preserveWhitespace: true,
       replacements: [
-        { matchTag: 'br', text: '  ', isSelfClosing: true },
+        { matchTag: 'br', text: '\n', isSelfClosing: true },
         { matchTag: 'b', text: '__' },
       ],
     })
     expect(extracted).toBe(`__bold text__
 some text
-  
-  
+
+
 more text`)
   })
 })
