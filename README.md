@@ -28,6 +28,18 @@ export interface Options {
     /** Replace a tag with some text. Flag self-closing tags with isSelfClosing: true. */
     replacements?: Replacement[]
 }
+
+// Content from the following tags are excluded by default
+export const defaultExcludeContentFromTags = [
+  'head',
+  'base',
+  'link',
+  'meta',
+  'noscript',
+  'script',
+  'style',
+  'title',
+]
 ```
 
 ## Example
