@@ -9,21 +9,21 @@ Single dependency on [htmlparser2](https://www.npmjs.com/package/htmlparser2)
 
 ```typescript
 export interface Replacement {
-  /** Tag name to match (without brackets) */
-  matchTag: string
-  /** Text to replace the tag with */
-  text: string
-  /** Is the tag self-closing?  */
-  isSelfClosing?: boolean
+    /** Tag name to match (without brackets) */
+    matchTag: string
+    /** Text to replace the tag with */
+    text: string
+    /** Is the tag self-closing?  */
+    isSelfClosing?: boolean
 }
 
 export interface Options {
-  /** Exclude the content from the set of tags. For example, style and script. */
-  excludeContentFromTags?: string[]
-  /** Whitespace is trimmed by default. Set this to true to preserve whitespace. */
-  preserveWhitespace?: boolean
-  /** Replace a tag with some text. Flag self-closing tags with isSelfClosing: true. */
-  replacements?: Replacement[]
+    /** Exclude the content from the set of tags. For example, style and script. */
+    excludeContentFromTags?: string[]
+    /** Whitespace is trimmed by default. Set this to true to preserve whitespace. */
+    preserveWhitespace?: boolean
+    /** Replace a tag with some text. Flag self-closing tags with isSelfClosing: true. */
+    replacements?: Replacement[]
 }
 ```
 
@@ -55,4 +55,28 @@ const html = `
     `
 const extracted = extractText(html)
 // Some Title Some text
+```
+
+Replacements example usage
+
+```typescript
+const html = `<b>bold <span>text</span></b>
+<div>some text</div>
+<br />
+<br>
+<p>more text</p>`
+const extracted = extractText(html, {
+    preserveWhitespace: true,
+    replacements: [
+        { matchTag: 'br', text: '  ', isSelfClosing: true },
+        { matchTag: 'b', text: '__' },
+    ],
+})
+/*
+__bold text__
+some text
+  
+  
+more text
+*/
 ```
