@@ -5,6 +5,9 @@ For example, script and style. Reduces multiple spaces to a single space
 and trims whitespace from the start and end by default. Set `preserveWhitespace`
 to `true` to disable this behavior. Optionally, replace tags with text.
 
+Offers a much nicer out-of-the-box experience compared to [striptags](https://www.npmjs.com/package/striptags).
+See comparison [here](https://runkit.com/dubiousdavid/extract-text-html-vs-striptags).
+
 Single dependency on [htmlparser2](https://www.npmjs.com/package/htmlparser2)
 
 ```typescript
