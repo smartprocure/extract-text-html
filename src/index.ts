@@ -34,20 +34,6 @@ export const defaultExcludeContentFromTags = [
   'title',
 ]
 
-const newStack = <T>() => {
-  const stack: T[] = []
-  const add = (item: T) => {
-    stack.push(item)
-    return stack.length
-  }
-  const remove = () => {
-    stack.pop()
-    return stack.length
-  }
-  const isEmpty = () => stack.length === 0
-  return { add, remove, isEmpty }
-}
-
 /**
  * Extract text from HTML. Excludes content from metadata tags by default.
  * For example, script and style. Reduces multiple spaces to a single space
@@ -60,7 +46,7 @@ export const extractText = (html: string, options: Options = {}) => {
     options.excludeContentFromTags ?? defaultExcludeContentFromTags
   const replacements = options.replacements ?? []
 
-  const excludeStack = newStack<string>()
+  const excludeStack: string[] = []
   let strippedText = ''
 
   const shouldExclude = (name: string) => excludeTags.includes(name)
@@ -71,7 +57,7 @@ export const extractText = (html: string, options: Options = {}) => {
   const parser = new htmlparser2.Parser({
     onopentagname(name) {
       debug('open tag name %s', name)
-      if (shouldExclude(name) && excludeStack.add(name) === 1) {
+      if (shouldExclude(name) && excludeStack.push(name) === 1) {
         debug('start excluding')
       }
       if (options.replacements) {
@@ -83,14 +69,17 @@ export const extractText = (html: string, options: Options = {}) => {
       }
     },
     ontext(text) {
-      if (excludeStack.isEmpty()) {
+      if (!excludeStack.length) {
         strippedText += text
       }
     },
     onclosetag(name) {
       debug('close tag name %s', name)
-      if (shouldExclude(name) && excludeStack.remove() === 0) {
-        debug('stop excluding')
+      if (shouldExclude(name)) {
+        excludeStack.pop()
+        if (excludeStack.length === 0) {
+          debug('stop excluding')
+        }
       }
       if (options.replacements) {
         const replacement = findReplacement(name)
