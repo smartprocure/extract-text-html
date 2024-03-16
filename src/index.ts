@@ -47,7 +47,7 @@ export const extractText = (html: string, options: Options = {}) => {
   const replacements = options.replacements ?? []
 
   const excludeStack: string[] = []
-  let strippedText = ''
+  let extractedText = ''
 
   const shouldExclude = (name: string) => excludeTags.includes(name)
 
@@ -64,13 +64,13 @@ export const extractText = (html: string, options: Options = {}) => {
         const replacement = findReplacement(name)
         if (replacement) {
           debug('replace open tag %s with %s', name, replacement.text)
-          strippedText += replacement.text
+          extractedText += replacement.text
         }
       }
     },
     ontext(text) {
       if (!excludeStack.length) {
-        strippedText += text
+        extractedText += text
       }
     },
     onclosetag(name) {
@@ -85,7 +85,7 @@ export const extractText = (html: string, options: Options = {}) => {
         const replacement = findReplacement(name)
         if (replacement && !replacement.isSelfClosing) {
           debug('replace close tag %s with %s', name, replacement.text)
-          strippedText += replacement.text
+          extractedText += replacement.text
         }
       }
     },
@@ -94,7 +94,7 @@ export const extractText = (html: string, options: Options = {}) => {
   parser.end()
 
   return options.preserveWhitespace
-    ? strippedText
+    ? extractedText
     : // Remove excess whitespace
-      strippedText.replace(/\s+/g, ' ').trim()
+      extractedText.replace(/\s+/g, ' ').trim()
 }
