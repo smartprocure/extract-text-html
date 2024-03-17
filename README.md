@@ -76,8 +76,7 @@ Replacements example usage
 
 ```typescript
 const html = `<b>bold <span>text</span></b>
-<div>some text</div><br /><br>
-<p>more text</p>`
+<div>some text</div><br /><br><p>more text</p>`
 const extracted = extractText(html, {
     preserveWhitespace: true,
     replacements: [
@@ -88,7 +87,6 @@ const extracted = extractText(html, {
 /*
 __bold text__
 some text
-
 
 more text
 */
