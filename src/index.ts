@@ -13,7 +13,7 @@ export interface Replacement {
 }
 
 export interface Options {
-  /** Exclude the content from the set of tags. For example, style and script. */
+  /** Exclude content from the set of tags. Defaults to all HTML metadata tags. */
   excludeContentFromTags?: string[]
   /** Whitespace is trimmed by default. Set this to true to preserve whitespace. */
   preserveWhitespace?: boolean
@@ -21,7 +21,7 @@ export interface Options {
   replacements?: Replacement[]
 }
 
-// Exclude content from metadata tags.
+// Exclude content from HTML metadata tags.
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Content_categories#metadata_content
 export const defaultExcludeContentFromTags = [
   'head',
