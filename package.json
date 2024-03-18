@@ -1,6 +1,6 @@
 {
   "name": "extract-text-html",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Extract text from HTML. Excludes content from metadata tags by default.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,8 +18,11 @@
     "text",
     "html",
     "strip",
+    "tag",
     "tags",
-    "metadata"
+    "metadata",
+    "replace",
+    "replacement"
   ],
   "author": "GovSpend",
   "prettier": {
@@ -37,6 +40,8 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@types/debug": "^4.1.12",
+    "debug": "^4.3.4",
     "htmlparser2": "^9.0.0"
   }
 }

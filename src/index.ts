@@ -1,13 +1,27 @@
 import * as htmlparser2 from 'htmlparser2'
+import _debug from 'debug'
 
-type Options = {
-  /** Exclude the content from the set of tags. For example, style and script. */
-  excludeContentFromTags?: string[]
-  /** Reduces multiple spaces to a single space and trims whitespace from the start and end. */
-  trimWhitespace?: boolean
+const debug = _debug('extract-text-html')
+
+export interface Replacement {
+  /** Tag name to match (without brackets) */
+  matchTag: string
+  /** Text to replace the tag with */
+  text: string
+  /** Is the tag self-closing?  */
+  isSelfClosing?: boolean
 }
 
-// Exclude content from metadata tags.
+export interface Options {
+  /** Exclude content from the set of tags. Defaults to all HTML metadata tags. */
+  excludeContentFromTags?: string[]
+  /** Whitespace is trimmed by default. Set this to true to preserve whitespace. */
+  preserveWhitespace?: boolean
+  /** Replace a tag with some text. Flag self-closing tags with isSelfClosing: true. */
+  replacements?: Replacement[]
+}
+
+// Exclude content from HTML metadata tags.
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Content_categories#metadata_content
 export const defaultExcludeContentFromTags = [
   'head',
@@ -22,41 +36,65 @@ export const defaultExcludeContentFromTags = [
 
 /**
  * Extract text from HTML. Excludes content from metadata tags by default.
- * For example, script and style. Removes excess whitespace by default.
+ * For example, script and style. Reduces multiple spaces to a single space
+ * and trims whitespace from the start and end by default. Set `preserveWhitespace`
+ * to `true` to disable this behavior. Optionally, replace tags with text.
  */
 export const extractText = (html: string, options: Options = {}) => {
   // Options
   const excludeTags =
     options.excludeContentFromTags ?? defaultExcludeContentFromTags
-  const trimWhitespace = options.trimWhitespace ?? true
+  const replacements = options.replacements ?? []
 
-  let excludeText = false
-  let strippedText = ''
+  const excludeStack: string[] = []
+  let extractedText = ''
 
-  const shouldExclude = (name: string) => excludeTags.includes(name)
+  const isExcludedTag = (name: string) => excludeTags.includes(name)
+
+  const findReplacement = (name: string) =>
+    replacements.find(({ matchTag }) => matchTag === name)
 
   const parser = new htmlparser2.Parser({
     onopentagname(name) {
-      if (shouldExclude(name)) {
-        excludeText = true
+      debug('open tag name %s', name)
+      if (isExcludedTag(name) && excludeStack.push(name) === 1) {
+        debug('start excluding')
+      }
+      if (options.replacements) {
+        const replacement = findReplacement(name)
+        if (replacement) {
+          debug('replace open tag %s with %s', name, replacement.text)
+          extractedText += replacement.text
+        }
       }
     },
     ontext(text) {
-      if (!excludeText) {
-        strippedText += text
+      if (!excludeStack.length) {
+        extractedText += text
       }
     },
     onclosetag(name) {
-      if (shouldExclude(name)) {
-        excludeText = false
+      debug('close tag name %s', name)
+      if (isExcludedTag(name)) {
+        excludeStack.pop()
+        if (excludeStack.length === 0) {
+          debug('stop excluding')
+        }
+      }
+      if (options.replacements) {
+        const replacement = findReplacement(name)
+        if (replacement && !replacement.isSelfClosing) {
+          debug('replace close tag %s with %s', name, replacement.text)
+          extractedText += replacement.text
+        }
       }
     },
   })
   parser.write(html)
   parser.end()
 
-  // Remove excess whitespace if needed
-  return trimWhitespace
-    ? strippedText.replace(/\s+/g, ' ').trim()
-    : strippedText
+  return options.preserveWhitespace
+    ? extractedText
+    : // Remove excess whitespace
+      extractedText.replace(/\s+/g, ' ').trim()
 }
