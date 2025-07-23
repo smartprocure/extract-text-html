@@ -32,6 +32,7 @@
   },
   "license": "ISC",
   "devDependencies": {
+    "@types/debug": "^4.1.12",
     "@types/jest": "^29.5.4",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "eslint": "^8.48.0",
@@ -40,7 +41,6 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@types/debug": "^4.1.12",
     "debug": "^4.3.4",
     "htmlparser2": "^9.0.0"
   }
