@@ -29,7 +29,7 @@ describe('extractText', () => {
 </html>
     `
     const extracted = extractText(html)
-    expect(extracted).toBe('Some Title Some text')
+    expect(extracted).toBe('Some Title\nSome text')
   })
   it('should extract text from mal-formed HTML', () => {
     const html = `
@@ -59,7 +59,7 @@ describe('extractText', () => {
     </script>
     `
     const extracted = extractText(html)
-    expect(extracted).toBe('Some Title Some text')
+    expect(extracted).toBe('Some Title\nSome text')
   })
   it('should handle custom excludeContentFromTags', () => {
     const html = `
