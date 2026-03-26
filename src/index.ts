@@ -95,6 +95,12 @@ export const extractText = (html: string, options: Options = {}) => {
 
   return options.preserveWhitespace
     ? extractedText
-    : // Remove excess whitespace
-      extractedText.replace(/\s+/g, ' ').trim()
+    : // Remove excess whitespace. Collapse multiple newlines into one.
+      extractedText
+        // Replace whitespace characters, excluding newlines, with a single space
+        .replace(/[ \t\r\f\v]+/g, ' ')
+        // Replace multiple newlines with a single newline, removing surround spaces
+        .replace(/[ ]?\n+[ ]?/g, '\n')
+        // Remove whitespace from the start and end
+        .trim()
 }

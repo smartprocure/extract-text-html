@@ -1,3 +1,7 @@
+# 0.3.0
+
+- Preserve newlines instead of replacing newlines with a space.
+
 # 0.2.0
 
 - Add `replacements` options to optionally replace tags with text.
